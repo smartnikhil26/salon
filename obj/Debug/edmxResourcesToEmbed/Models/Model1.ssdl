@@ -1,0 +1,221 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="SalonModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'Salon.dbo.Discount' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="Discount">
+    <Key>
+      <PropertyRef Name="StartDate" />
+      <PropertyRef Name="EndDate" />
+      <PropertyRef Name="IsActive" />
+    </Key>
+    <Property Name="DiscountId" Type="int" />
+    <Property Name="StartDate" Type="date" Nullable="false" />
+    <Property Name="EndDate" Type="date" Nullable="false" />
+    <Property Name="IsActive" Type="bit" Nullable="false" />
+    <Property Name="Discount" Type="int" />
+    <Property Name="Coupon" Type="nvarchar" MaxLength="50" />
+    <Property Name="SalonId" Type="int" />
+  </EntityType>
+  <EntityType Name="Login">
+    <Key>
+      <PropertyRef Name="LoginId" />
+    </Key>
+    <Property Name="LoginId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="LoginName" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Password" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="UserTypeId" Type="int" />
+    <Property Name="SalonId" Type="int" />
+  </EntityType>
+  <EntityType Name="OrderServed">
+    <Key>
+      <PropertyRef Name="OrderId" />
+    </Key>
+    <Property Name="OrderId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SalonId" Type="int" />
+    <Property Name="EmployeeId" Type="int" />
+    <Property Name="CustomerId" Type="int" />
+    <Property Name="ServiceTypeId" Type="int" />
+  </EntityType>
+  <EntityType Name="SalonData">
+    <Key>
+      <PropertyRef Name="SalonId" />
+    </Key>
+    <Property Name="SalonId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SalonName" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Service">
+    <Key>
+      <PropertyRef Name="ServiceID" />
+    </Key>
+    <Property Name="ServiceID" Type="int" Nullable="false" />
+    <Property Name="ServiceName" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="ServiceType" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Price" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Discount" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="SalonId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <EntityType Name="UserType">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserTypeName" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <Association Name="FK_Discount_Salon">
+    <End Role="SalonData" Type="Self.SalonData" Multiplicity="0..1" />
+    <End Role="Discount" Type="Self.Discount" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SalonData">
+        <PropertyRef Name="SalonId" />
+      </Principal>
+      <Dependent Role="Discount">
+        <PropertyRef Name="SalonId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Login_Salon">
+    <End Role="SalonData" Type="Self.SalonData" Multiplicity="0..1" />
+    <End Role="Login" Type="Self.Login" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SalonData">
+        <PropertyRef Name="SalonId" />
+      </Principal>
+      <Dependent Role="Login">
+        <PropertyRef Name="SalonId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Login_User">
+    <End Role="UserType" Type="Self.UserType" Multiplicity="0..1" />
+    <End Role="Login" Type="Self.Login" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserType">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Login">
+        <PropertyRef Name="UserTypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrderServed_Login">
+    <End Role="Login" Type="Self.Login" Multiplicity="0..1" />
+    <End Role="OrderServed" Type="Self.OrderServed" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Login">
+        <PropertyRef Name="LoginId" />
+      </Principal>
+      <Dependent Role="OrderServed">
+        <PropertyRef Name="EmployeeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrderServed_Login1">
+    <End Role="Login" Type="Self.Login" Multiplicity="0..1" />
+    <End Role="OrderServed" Type="Self.OrderServed" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Login">
+        <PropertyRef Name="LoginId" />
+      </Principal>
+      <Dependent Role="OrderServed">
+        <PropertyRef Name="CustomerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrderServed_Salon">
+    <End Role="SalonData" Type="Self.SalonData" Multiplicity="0..1" />
+    <End Role="OrderServed" Type="Self.OrderServed" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SalonData">
+        <PropertyRef Name="SalonId" />
+      </Principal>
+      <Dependent Role="OrderServed">
+        <PropertyRef Name="SalonId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrderServed_Service">
+    <End Role="Service" Type="Self.Service" Multiplicity="0..1" />
+    <End Role="OrderServed" Type="Self.OrderServed" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Service">
+        <PropertyRef Name="ServiceID" />
+      </Principal>
+      <Dependent Role="OrderServed">
+        <PropertyRef Name="ServiceTypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Service_Service">
+    <End Role="SalonData" Type="Self.SalonData" Multiplicity="1" />
+    <End Role="Service" Type="Self.Service" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SalonData">
+        <PropertyRef Name="SalonId" />
+      </Principal>
+      <Dependent Role="Service">
+        <PropertyRef Name="SalonId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="SalonModelStoreContainer">
+    <EntitySet Name="Login" EntityType="Self.Login" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="OrderServed" EntityType="Self.OrderServed" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SalonData" EntityType="Self.SalonData" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Service" EntityType="Self.Service" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserType" EntityType="Self.UserType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Discount" EntityType="Self.Discount" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [Discount].[DiscountId] AS [DiscountId], 
+    [Discount].[StartDate] AS [StartDate], 
+    [Discount].[EndDate] AS [EndDate], 
+    [Discount].[IsActive] AS [IsActive], 
+    [Discount].[Discount] AS [Discount], 
+    [Discount].[Coupon] AS [Coupon], 
+    [Discount].[SalonId] AS [SalonId]
+    FROM [dbo].[Discount] AS [Discount]</DefiningQuery>
+    </EntitySet>
+    <AssociationSet Name="FK_Discount_Salon" Association="Self.FK_Discount_Salon">
+      <End Role="SalonData" EntitySet="SalonData" />
+      <End Role="Discount" EntitySet="Discount" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Login_Salon" Association="Self.FK_Login_Salon">
+      <End Role="SalonData" EntitySet="SalonData" />
+      <End Role="Login" EntitySet="Login" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Login_User" Association="Self.FK_Login_User">
+      <End Role="UserType" EntitySet="UserType" />
+      <End Role="Login" EntitySet="Login" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrderServed_Login" Association="Self.FK_OrderServed_Login">
+      <End Role="Login" EntitySet="Login" />
+      <End Role="OrderServed" EntitySet="OrderServed" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrderServed_Login1" Association="Self.FK_OrderServed_Login1">
+      <End Role="Login" EntitySet="Login" />
+      <End Role="OrderServed" EntitySet="OrderServed" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrderServed_Salon" Association="Self.FK_OrderServed_Salon">
+      <End Role="SalonData" EntitySet="SalonData" />
+      <End Role="OrderServed" EntitySet="OrderServed" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrderServed_Service" Association="Self.FK_OrderServed_Service">
+      <End Role="Service" EntitySet="Service" />
+      <End Role="OrderServed" EntitySet="OrderServed" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Service_Service" Association="Self.FK_Service_Service">
+      <End Role="SalonData" EntitySet="SalonData" />
+      <End Role="Service" EntitySet="Service" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

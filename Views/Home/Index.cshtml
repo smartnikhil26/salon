@@ -1,0 +1,8 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+@if (Session["userId"] != null)
+{
+    <h2>Welcome @Session["UserName"].ToString() @Session["UserType"].ToString()</h2>
+}
+
